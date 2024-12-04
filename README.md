@@ -1,3 +1,10 @@
+Deploy to gcr
+-------------
+
+```bash
+gcloud builds submit --config ".cloudbuild/cloudbuild.manual-approval.yaml" .
+```
+
 # Manual Workflow Approval
 
 [![ci](https://github.com/trstringer/manual-approval/actions/workflows/ci.yaml/badge.svg)](https://github.com/trstringer/manual-approval/actions/workflows/ci.yaml)
