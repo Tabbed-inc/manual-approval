@@ -52,7 +52,7 @@ func (a approvalEnvironment) runURL() string {
 }
 
 func (a *approvalEnvironment) createApprovalIssue(ctx context.Context) error {
-	issueTitle := fmt.Sprintf("%d", a.runID)
+	issueTitle := ""
 
 	if a.issueTitle != "" {
 		issueTitle = fmt.Sprintf("%s: %s", issueTitle, a.issueTitle)
