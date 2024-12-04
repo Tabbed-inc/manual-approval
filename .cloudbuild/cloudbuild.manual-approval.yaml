@@ -1,0 +1,42 @@
+steps:
+  - id: create-repository
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - >
+        gcloud artifacts repositories create 
+        --project=${PROJECT_ID}
+        --location=${_LOCATION}
+        --repository-format=docker
+        ${_REPOSITORY_NAME} || true
+    waitFor: ["-"] # begins immediately
+
+  - id: configure-repository
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - >
+        gcloud artifacts repositories add-iam-policy-binding ${_REPOSITORY_NAME}
+        --location=${_LOCATION}
+        --member=allUsers
+        --role=roles/artifactregistry.reader
+    waitFor: ["-"] # begins immediately
+
+  - id: "docker-build"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "${_IMAGE_TAG}", "."]
+    waitFor: ["create-repository"]
+
+images:
+  - ${_IMAGE_TAG}
+
+options:
+  dynamic_substitutions: true
+
+substitutions:
+  _LOCATION: us-central1
+  _REPOSITORY_NAME: manual-approval
+  _IMAGE_NAME: manual-approval
+  _IMAGE_TAG: ${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY_NAME}/${_IMAGE_NAME}
