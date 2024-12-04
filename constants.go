@@ -14,6 +14,7 @@ const (
 	envVarRepoOwner                          string = "GITHUB_REPOSITORY_OWNER"
 	envVarWorkflowInitiator                  string = "GITHUB_ACTOR"
 	envVarToken                              string = "INPUT_SECRET"
+	envVarTokenApprovers                     string = "INPUT_SECRET-APPROVERS"
 	envVarApprovers                          string = "INPUT_APPROVERS"
 	envVarMinimumApprovals                   string = "INPUT_MINIMUM-APPROVALS"
 	envVarIssueTitle                         string = "INPUT_ISSUE-TITLE"

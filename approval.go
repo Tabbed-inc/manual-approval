@@ -55,9 +55,9 @@ func (a *approvalEnvironment) createApprovalIssue(ctx context.Context) error {
 	issueTitle := ""
 
 	if a.issueTitle != "" {
-		issueTitle = fmt.Sprintf("%s: %s", issueTitle, a.issueTitle)
+		issueTitle = fmt.Sprintf("%s", a.issueTitle)
 	} else {
-		issueTitle = fmt.Sprintf("%s: %s", issueTitle, "Manual approval required for workflow run")
+		issueTitle = fmt.Sprintf("%s", "Manual approval required for workflow run")
  	}
 
 	issueBody := fmt.Sprintf(`Workflow is pending manual review.
