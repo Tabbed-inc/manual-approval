@@ -96,8 +96,7 @@ func newCommentLoopChannel(ctx context.Context, apprv *approvalEnvironment, clie
 	return channel
 }
 
-func newGithubClient(ctx context.Context) (*github.Client, error) {
-	token := os.Getenv(envVarToken)
+func newGithubClient(ctx context.Context, token string) (*github.Client, error) {
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
 	)
@@ -133,6 +132,10 @@ func validateInput() error {
 		missingEnvVars = append(missingEnvVars, envVarToken)
 	}
 
+	if os.Getenv(envVarTokenApprovers) == "" {
+		missingEnvVars = append(missingEnvVars, envVarTokenApprovers)
+	}
+
 	if os.Getenv(envVarApprovers) == "" {
 		missingEnvVars = append(missingEnvVars, envVarApprovers)
 	}
@@ -158,13 +161,20 @@ func main() {
 	repoOwner := os.Getenv(envVarRepoOwner)
 
 	ctx := context.Background()
-	client, err := newGithubClient(ctx)
+	token := os.Getenv(envVarToken)
+	tokenApprovers := os.Getenv(envVarTokenApprovers)
+	client, err := newGithubClient(ctx, token)
+	clientApprovers, errApprovers := newGithubClient(ctx, tokenApprovers)
 	if err != nil {
 		fmt.Printf("error connecting to server: %v\n", err)
 		os.Exit(1)
 	}
+	if errApprovers != nil {
+		fmt.Printf("error connecting to server: %v\n", err)
+		os.Exit(1)
+	}
 
-	approvers, err := retrieveApprovers(client, repoOwner)
+	approvers, err := retrieveApprovers(clientApprovers, repoOwner)
 	if err != nil {
 		fmt.Printf("error retrieving approvers: %v\n", err)
 		os.Exit(1)

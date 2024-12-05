@@ -10,6 +10,9 @@ inputs:
   secret:
     description: Secret
     required: true
+  secret-approvers:
+    description: Secret for retrieving approvers
+    required: true
   minimum-approvals:
     description: Minimum number of approvals to progress workflow
     required: false
